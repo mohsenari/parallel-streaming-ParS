@@ -22,10 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class ParS {
-	// static String host = "www-itec.uni-klu.ac.at";
-	// static String host = "localhost";
-	//static String host = "172.17.20.167";
-	//static String host = "192.168.1.2";
+
 	static int segmentduration = 15;
 	long playbacktime = 0;
 	static long buffertime = 0;
@@ -34,12 +31,10 @@ public class ParS {
 	static int numberofstalls = 0;
 	static String host = "136.159.7.38";
 	static long totalbitrate = 0;
-	// static String path =
-	// "/ftp/datasets/DASHDataset2014/BigBuckBunny/10sec/bunny_"; //46980bps/";
-	// static String path = "/";
+
 	static String path = "/www-itec.uni-klu.ac.at/ftp/datasets/DASHDataset2014/BigBuckBunny/15sec/bunny_";
 	static String mpdpath = "/www-itec.uni-klu.ac.at/ftp/datasets/DASHDataset2014/BigBuckBunny/15sec/BigBuckBunny_15s_simple_2014_05_09.mpd";
-	// http://www-itec.uni-klu.ac.at/ftp/datasets/DASHDataset2014/BigBuckBunny/10sec/bunny_45373bps/BigBuckBunny_2s2.m4s
+
 	public static void main(String[] args) throws IOException {
 		int connumber = Integer.parseInt(args[1]);// number of parallel connections
 		
@@ -53,7 +48,6 @@ public class ParS {
 		PrintWriter writer = new PrintWriter(log, "UTF-8");
 		PrintWriter writer2 = new PrintWriter(log2, "UTF-8");
 		long bitrate = 0;
-		// long totaldeliveredbytes = 0;
 
 		// requesting segments
 		for (int i = 1; i <= numsegments; i++) {
@@ -62,7 +56,6 @@ public class ParS {
 			String filename = "BigBuckBunny_15s" + i + ".m4s";
 			String adaptedrate = rateadapt(bitrate) + "";
 			int segmentsize = getfilesize(adaptedrate, filename);
-			// totaldeliveredbytes += segmentsize;
 			int subsegmentsize = segmentsize / connumber;
 			ArrayList<Thread> ths = new ArrayList<Thread>(connumber);
 			for (int j = 0; j < connumber; j++) {
@@ -112,9 +105,9 @@ public class ParS {
 
 			// outputs
 			System.out.println("Segment number: " + i);
-			//System.err.println("Transmission Adapted Rate: " + adaptedrate + " bps");
 			System.out.println("Transmission Rate: " +((float)bitrate/1000000) + " Mbps");
 			System.out.println("buffer time: " + buffertime);
+			
 			// write log file
 			writer.println(bitrate + "	" + adaptedrate);
 			totalbitrate += bitrate;
@@ -138,7 +131,6 @@ public class ParS {
 			BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			String t;
 			while ((t = br.readLine()) != null) {
-				// System.out.println(t);
 				String cl = "Content-Length: ";
 				if (t.contains(cl)) {
 					String filesize = t.substring(cl.length());
@@ -176,7 +168,6 @@ public class ParS {
 			int n = 0;
 			while ((n = in.read(buf)) >= 0) {
 				out.write(buf, 0, n);
-				//System.out.println(buf);
 			}
 			out.flush();
 			out.close();
@@ -197,7 +188,6 @@ public class ParS {
 					return rates[i];
 				else if (bitrate < rates[i])
 					return i == 0 ? rates[0] : rates[i - 1];
-				// Math.max(rates[0], rates[i-1]);
 			}
 		}
 		return rates[rates.length - 1];
@@ -221,7 +211,6 @@ public class ParS {
 			int n = 0;
 			while ((n = in.read(buf)) >= 0) {
 				out.write(buf, 0, n);
-				//System.out.println(buf);
 			}
 			out.flush();
 			out.close();
